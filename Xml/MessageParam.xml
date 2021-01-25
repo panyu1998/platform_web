@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Params>
+  <Param key="MessageURL" value=""/>
+  <Param key="UserID" value=""/>
+  <Param key="Account" value=""/>
+  <Param key="Password" value=""/>
+  <Param key="MessageReg" value=""/>
+  <Param key="MessageAbsence" value=""/>
+  <Param key="EffectiveTime" value=""/>
+</Params>

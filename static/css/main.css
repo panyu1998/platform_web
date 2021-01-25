@@ -1,0 +1,309 @@
+img {
+  pointer-events: none;
+}
+
+/*验证码图片与input框水平居中对齐*/
+input,
+img {
+  vertical-align: middle;
+}
+.hello {
+  background-color: #E6F4FF;
+  /* position: fixed;
+	  	top: 0;
+	  	left: 0;
+	  	width: 100%;
+	  	height: 100%;
+	  	min-width: 200px;
+	  	z-index: -10;
+	  	zoom: 1;
+	  	background-color: #E6F4FF;
+	  	background-repeat: no-repeat;
+	  	background-size: cover;
+	  	-webkit-background-size: cover;
+	  	-o-background-size: cover;
+	  	background-position: center bottom;	 */
+}
+
+.my-btn {
+  width: 100%;
+  height: 30px;
+  font-size: 13px;
+  /* margin: 4%; */
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: 2.5%;
+  margin-bottom: 3%;
+  background-color: #3959fb;
+  text-align: center;
+  color: #FFFFFF;
+  line-height: 2.55555556;
+  border-radius: 5px;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  overflow: hidden;
+}
+
+.table-wrap {
+  display: table;
+  margin-top: 5px;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}
+
+.td1 {
+  text-align: -webkit-left;
+  font-size: 14px;
+  display: table-cell;
+  width: 90px;
+  vertical-align: top;
+}
+
+.td1>div {
+  margin: 0;
+  padding: 0;
+  padding-right: 5px;
+}
+
+.reddot {
+  position: absolute;
+  right: -5px;
+  top: 17px;
+  color: red;
+  line-height: 5px;
+}
+
+textarea {
+  resize: none;
+  height: 200px;
+}
+
+.td2 {
+  position: relative;
+}
+
+.tip {
+  font-family: 宋体;
+  font-size: 13px;
+  line-height: 17px;
+  width: 100%;
+  text-align: center;
+  z-index: 1000;
+  position: absolute;
+  padding: 5px;
+  background: #2DCB70;
+  color: #fff;
+  top: 150px;
+  font-weight: normal;
+  text-transform: none;
+  margin: 0 auto;
+  border-radius: 3px;
+  opacity: 0;
+}
+
+.tip em {
+  font-style: normal;
+}
+
+.tip span {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  border: 7px solid transparent;
+  border-bottom-color: #2DCB70;
+  left: 20%;
+  margin-left: -3px;
+  top: -14px;
+}
+
+.lineone {
+  text-align: right;
+  font-size: 14px;
+  line-height: 34px;
+}
+
+.linetwo {
+  text-align: right;
+  font-size: 12px;
+  line-height: 34px;
+}
+
+.linethr {
+  width: 92px;
+  height: 34px;
+  text-align: left;
+  font-size: 12px;
+  line-height: 15px;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.p_header {
+
+  text-align: center;
+  font-size: 18px;
+  color: #0459B2;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.p1 {
+  margin-left: 10px;
+  text-align: left;
+  /* font-size: 14px; */
+  /* color: #0459B2;
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem; */
+}
+
+.axq {
+  float: right;
+  text-decoration: underline;
+  font-size: 12px;
+  color: #49abfe;
+}
+
+/* 报告 */
+.xhx-2x {
+  height: 1.875rem;
+  width: 250px;
+  border: none;
+  border-bottom: 1px solid #6f8295;
+  text-align: center;
+  outline: none;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.xhx-3x {
+  height: 1.875rem;
+  width: 96%;
+  max-width: 780px;
+  border: none;
+  border-bottom: 1px solid #6f8295;
+  text-align: left;
+  outline: none;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.xhx {
+  height: 1.875rem;
+  width: 120px;
+  border: none;
+  border-bottom: 1px solid #6f8295;
+  text-align: center;
+  outline: none;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.xhx-mini {
+  height: 1.875rem;
+  width: 60px;
+  border: none;
+  border-bottom: 1px solid #6f8295;
+  text-align: center;
+  outline: none;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.title_h5 {
+  font-weight: 700;
+  padding: 3px;
+}
+
+.input_date {
+  height: 1.875rem;
+  width: 40px;
+  border: none;
+}
+
+.xhx-select {
+  height: 1.875rem;
+  width: 40px;
+  border: none;
+  border-bottom: 1px solid #6f8295;
+  text-align: center;
+  outline: none;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.xhx-text {
+  height: 1.875rem;
+  width: 80px;
+  border: none;
+  border-bottom: 1px solid #6f8295;
+  text-align: center;
+  outline: none;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.xhx-none {
+  height: 1.875rem;
+  width: auto;
+  border: none;
+  /* border-bottom: 0px solid #6f8295; */
+  text-align: center;
+  outline: none;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+/* 上传文件 */
+.fileinput {
+
+  width: 78%;
+  margin-top: 10px;
+}
+
+/* end */

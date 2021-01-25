@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    lblCurrentUser:<asp:label id="lblCurrentUser" font-size="16px" forecolor="black">
+    Label1: <asp:label id="Label1" font-size="14px" forecolor="black">       
+        <script src="static/js/public/jquery1.12.1.min.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $.ajax({
+                    url: "../api/Mainpage/Info",
+                    type: "post",
+                    contentType: "application/x-www-form-urlencoded",
+                    data: {
+                        "lblCurrentUser": $("#lblCurrentUser").val(),
+                        "Label1": $("#Label1").val()
+                    },
+                    success: function (msg) {
+                        alert(msg.message);
+                    },
+                    failure: function (msg) {
+                        alert("Fail");
+                    }
+                });                
+            });
+        </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+.el-upload__inner{
+	margin-top: -34px!important;
+}
+.el-upload__inner iframe,.el-upload__inner form,.el-upload__inner iframe html{
+	width: 0px!important;
+	height: 0px!important;
+}

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Warnings>
+  <Warning Chinese="症状" English="Symptom"/>
+  <Warning Chinese="预警日期" English="WarningDate"/>
+  <Warning Chinese="病例数" English="CaseNum"/>
+  <Warning Chinese="处置情况" English="Dispose"/>
+  <Warning Chinese="学校名称" English="SchoolName"/>
+  <Warning Chinese="班级名称" English="ClassName"/>
+</Warnings>

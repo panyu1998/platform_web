@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grade>
+  <dic key="17" value="小小"></dic>
+  <dic key="18" value="小"></dic>
+  <dic key="19" value="中"></dic>
+  <dic key="20" value="大"></dic>
+  <dic key="1" value="小一"></dic>
+  <dic key="2" value="小二"></dic>
+  <dic key="3" value="小三"></dic>
+  <dic key="4" value="小四"></dic>
+  <dic key="5" value="小五"></dic>
+  <dic key="6" value="小六"></dic>
+  <dic key="7" value="初一"></dic>
+  <dic key="8" value="初二"></dic>
+  <dic key="9" value="初三"></dic>
+  <dic key="10" value="高一"></dic>
+  <dic key="11" value="高二"></dic>
+  <dic key="12" value="高三"></dic>
+</Grade>

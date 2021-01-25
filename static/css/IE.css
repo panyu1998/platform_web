@@ -1,0 +1,16 @@
+input[type=file] {
+	position: absolute!important;
+	display: inline-block!important;
+	opacity: 0!important;
+	width: 60px!important;
+    height: 100%!important;
+    outline: 0!important;
+    margin-left:-60px!important;
+    border: none!important;
+    background-color: #20a0ff!important;
+    color: #fff!important;
+    line-height: 34px!important;
+    border-top-right-radius: 4px!important;
+    border-bottom-right-radius: 4px!important;
+    z-index: 10000!important;
+}

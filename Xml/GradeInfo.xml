@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grades>
+  <Grade upper="小小班" lower="17"/>
+  <Grade upper="小班" lower="18"/>
+  <Grade upper="中班" lower="19"/>
+  <Grade upper="大班" lower="20"/>
+  <Grade upper="小一" lower="1"/>
+  <Grade upper="小二" lower="2"/>
+  <Grade upper="小三" lower="3"/>
+  <Grade upper="小四" lower="4"/>
+  <Grade upper="小五" lower="5"/>
+  <Grade upper="小六" lower="6"/>
+  <Grade upper="初一" lower="7"/>
+  <Grade upper="初二" lower="8"/>
+  <Grade upper="初三" lower="9"/>
+  <Grade upper="高一" lower="10"/>
+  <Grade upper="高二" lower="11"/>
+  <Grade upper="高三" lower="12"/>
+</Grades>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Absences>
+  <Absence Chinese="学生姓名" English="Name"/>
+  <Absence Chinese="年龄" English="Age"/>
+  <Absence Chinese="性别" English="SexS"/>
+  <Absence Chinese="请假原因" English="AbsenceReason"/>
+  <Absence Chinese="是否转介" English="ReferralStatus"/>
+  <Absence Chinese="转归(诊断结果)" English="Result"/>
+  <Absence Chinese="状态" English="Status"/>
+  <Absence Chinese="学校名称" English="SchoolName"/>
+  <Absence Chinese="班级名称" English="ClassName"/>
+</Absences>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate>
+  <!--*******表格数据填充部分，若需要删除无数据表格，请在表格中指定第一列为“采样日期”*******-->
+  <DataList>
+    <Data ConnectionString="Data Source=140.200.0.250\sql2008r2;Initial Catalog=Lhcdc_Platform;User ID=sa;Password=cnwayer@1234;max pool size=512; Min pool Size=1">
+      <DataSet>
+        <!--*******特殊表格，列名不固定，需要动态生成表格专用模板*******-->
+        <!--检验结果 废气-->
+        <DataSouce SqlString="exec sp_GetReportInfo @EventID" Name="9" BookMark="ItemResultsWasteWater" TableCount="2" StartColIndex="5" ReplaceItemCount="4" ColumnName="废水项目名称" TemplateName="环评报告-废水.doc" >
+          <CommandParameters>
+            <Parameter DataField="TestFormID" Type="System.String" />
+          </CommandParameters>
+          <Fields>
+            <DaField DataField="Math" FillType="String" />
+            <DaField DataField="Chinese"  FillType="String" />
+          </Fields>
+        </DataSouce>
+        <!--检验结果 地下水-->
+        <DataSouce SqlString="exec sp_GetReportInfo @EventID" Name="9" BookMark="ItemResultsUnderWater" TableCount="2" StartColIndex="6" ReplaceItemCount="4" ColumnName="地下水项目名称" TemplateName="环评报告-地下水.doc" >
+          <CommandParameters>
+            <Parameter DataField="TestFormID" Type="System.String" />
+          </CommandParameters>
+          <Fields>
+            <DaField DataField="Math" FillType="String" />
+            <DaField DataField="Chinese"  FillType="String" />
+          </Fields>
+        </DataSouce>
+        <!--检验结果 土壤（测试）-->
+        <DataSouce SqlString="exec sp_GetReportInfo @EventID" Name="9" BookMark="ItemResultsSoil" TableCount="2" StartColIndex="6" ReplaceItemCount="4" ColumnName="土壤项目名称" TemplateName="环评报告-土壤.doc" >
+          <CommandParameters>
+            <Parameter DataField="TestFormID" Type="System.String" />
+          </CommandParameters>
+          <Fields>
+            <DaField DataField="Math" FillType="String" />
+            <DaField DataField="Chinese"  FillType="String" />
+          </Fields>
+        </DataSouce>
+        <!--*******特殊表格，列名不固定，需要动态生成表格专用模板*******-->
+        
+        <!--*******普通表格*******-->
+		    <!--检测方法、使用仪器及检出限 地下水-->
+        <DataSouce SqlString="exec sp_GetReportInfo @EventID" Name="2" BookMark="ResultsTestWater">
+          <CommandParameters>
+            <Parameter DataField="TestFormID" Type="System.String" />
+          </CommandParameters>
+          <Fields>
+            <DaField DataField="Math" FillType="String" />
+            <DaField DataField="Chinese"  FillType="String" />
+          </Fields>
+        </DataSouce>
+		    <!--检测方法、使用仪器及检出限 环境空气-->
+        <DataSouce SqlString="exec sp_GetReportInfo @EventID" Name="5" BookMark="ResultsTestStd">
+          <CommandParameters>
+            <Parameter DataField="TestFormID" Type="System.String" />
+          </CommandParameters>
+          <Fields>
+            <DaField DataField="Math" FillType="String" />
+            <DaField DataField="Chinese"  FillType="String" />
+          </Fields>
+        </DataSouce>
+		    <!--送检单位名称和地址-->
+        <DataSouce SqlString="exec sp_GetReportInfo @EventID" Name="3">
+          <CommandParameters>
+            <Parameter DataField="EventID" Type="System.String" />
+          </CommandParameters>
+          <Fields>
+            <DaField DataField="Math" FillType="String" />
+            <DaField DataField="Chinese"  FillType="String" />
+          </Fields>
+        </DataSouce>
+        
+        <!--*******普通表格*******-->
+      </DataSet>
+    </Data>
+  </DataList>
+  <!--*******表格数据填充部分，若需要删除无数据表格，请在表格中指定第一列为“采样日期”*******-->
+  
+  <!--*******普通字段填充*******-->
+  <FillFields>
+    <FillField FillMark="{疫情单位}" FieldNode="3.ReportUnitName" />
+    <FillField FillMark="{地址}" FieldNode="3.Address" />
+    <FillField FillMark="{联系电话}" FieldNode="3.Phone" />
+    <FillField FillMark="{ReportDate}" FieldNode="3.ReportDate" />
+    <FillField FillMark="{症状}" FieldNode="3.LinkMan1MobilePhone" />
+    <FillField FillMark="{首发病例学生情况}" FieldNode="3.FirstCaseInfo" />
+    <FillField FillMark="{首发病例时间}" FieldNode="3.FirstCaseDate" />
+    <FillField FillMark="{发现途径}" FieldNode="3.CheckOutWay" />
+    <FillField FillMark="{首发病例症状}" FieldNode="3.FirstCaseSymptom" />
+    <FillField FillMark="{DeadLine}" FieldNode="3.TestFormCode" />
+    <FillField FillMark="{症状}" FieldNode="3.TestFormCode" />
+    <FillField FillMark="{CaseNum}" FieldNode="3.CaseNum" />
+    <FillField FillMark="{病例分布情况}" FieldNode="3.ClassDistribution" />
+    <FillField FillMark="{CurrentEventSitu}" FieldNode="3.TestFormCode" />
+    <FillField FillMark="{Num1}" FieldNode="3.Num1" />
+    <FillField FillMark="{Num2}" FieldNode="3.Num2" />
+    <FillField FillMark="{班级学生数量}" FieldNode="3.ClassStudentCount" />
+    <FillField FillMark="{TeacherNum}" FieldNode="3.TeacherNum" />
+    <FillField FillMark="{SchoolDoctorNum}" FieldNode="3.SchoolDoctorNum" />
+    <FillField FillMark="{发现病历班级学生情况}" FieldNode="3.CaseClassDistribution" />
+    <FillField FillMark="{Deficiency}" FieldNode="3.Deficiency" />
+    <FillField FillMark="{SampleCount}" FieldNode="3.SampleCount" />
+    <FillField FillMark="{SampleName}" FieldNode="3.SampleName" />
+    <FillField FillMark="{ClassCloseAdvice}" FieldNode="3.ClassCloseAdvice" />
+    <FillField FillMark="{OutDocNum}" FieldNode="3.OutDocNum" />
+    <FillField FillMark="{ArriveDate}" FieldNode="3.ArriveDate" />
+    <FillField FillMark="{FirstCaseReturnDate}" FieldNode="3.FirstCaseReturnDate" />
+    <FillField FillMark="{医院名称}" FieldNode="3.HospitalName" />
+  </FillFields>
+  <!--*******普通字段填充*******-->
+
+  <!--*******图片填充*******-->
+  <ImageFields>
+    <ImageField BookMark="PointPic"  FieldNode="7.FileUrl" Width="400" Height="300" />
+    <ImageField BookMark="PointPic1"  FieldNode="7.FileUrl" Width="400" Height="300" />
+    <ImageField BookMark="PointPic2"  FieldNode="7.FileUrl" Width="400" Height="300" />
+    <ImageField BookMark="TestFormCodeBarCode"  FieldNode="3.TestFormCode" GeneratePic="true" Width="180" Height="45" />
+    <ImageField BookMark="Drafter"  FieldNode="sign.ssignature" IsImage="true" Width="60" Height="30" />
+  </ImageFields>
+  <!--*******图片填充*******-->
+  
+  <!--*******传入参数*******-->
+  <Parameters>
+    <Parameter DataField="EventID" Type="System.String" />
+  </Parameters>
+  <!--*******传入参数*******-->
+</DataTemplate>

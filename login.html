@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    UserName:    <input type="text" id="tName" />
+    <br />
+    Password:<input type="password" id="tPwd" />
+    <br />
+    <input type="button" value="LogIn" onclick="LoginOn()" />
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript">
+        var LoginOn = function () {
+            $.ajax({
+                url: "../api/Login/LoginOn",
+                type: "post",
+                contentType: "application/x-www-form-urlencoded",  
+                data: {
+                    "UserName": $("#tName").val(),
+                    "Password": $("#tPwd").val()
+                },
+                success: function (msg) {
+                    alert(msg.message);
+
+                   window.location.href = "mainpage.html";
+                },
+                failure: function (msg) {
+                    alert("Fail");
+                }
+            });
+        }
+   </script>
+</body>
+</html>
