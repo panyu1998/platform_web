@@ -44,12 +44,14 @@ router.beforeEach((to, from, next) => {
       if (to.matched.some(m => m.meta.requireAuth)) {
         if (localStorage.getItem('login') === '1') { //已登录的
           next();
+          console.log("22222")
         } else {
           next('/');
           // Vue.prototype.$message.warning('检测到您还未登录,请登录后操作！')
         }
       } else { //requireAuth为false的
         next(); //一定要记得写
+        console.log("22222")
       }
     }
   }),

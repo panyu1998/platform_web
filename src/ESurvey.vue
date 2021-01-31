@@ -44,8 +44,10 @@
             <form id="form1" runat="server">
               <table class="table-wrap table-input width-full table-read">
 				<!-- <div> -->
-					<tbody v-if="c19List.length!==0" v-for="(item,index) in c19List" :key="item.ID">
-					  <tr>
+          <!-- item.ID -->
+          <tbody v-if="c19List.length!==0" v-for="(item,index) in c19List" :key="item.ID">
+					<!-- <tbody v-if="c19List.length!==0" v-for="(item,index) in c19List" :key="index"> -->
+					  <tr>      
 						<td class='th5'>序号</td>
 						<td>{{item.RowNo}}</td>
 					  </tr>
@@ -62,7 +64,7 @@
 						  <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary" style="background: #184266;" v-bind:id="item.ID" @click="Survey1C">调查表</a>
 						  <a href="javascript:;" onclick="return false" class="weui-btn weui-btn_mini weui-btn_primary" v-bind:id="item.ID">采样单</a>
 						  <a href="javascript:;" onclick="return false" class="weui-btn weui-btn_mini weui-btn_primary" v-bind:id="[item.ID,item.EpidemicID]" style="background: #184266;">意见书</a>
-						  <a href="javascript:;" onclick="return false" class="weui-btn weui-btn_mini weui-btn_primary" v-bind:id="[item.ID,item.EpidemicID]" >初报告</a>
+						  <a href="javascript:;" onclick="return false" class="weui-btn weui-btn_mini weui-btn_primary" v-bind:id="[item.ID,item.EpidemicID]" @click="Survey4C">初报告</a>
 						  <a href="javascript:;" onclick="return false" class="weui-btn weui-btn_mini weui-btn_primary" v-bind:id="[item.ID,item.EpidemicID]" style="background: #184266;">行政报告</a>
 						</td>
 					  </tr>
@@ -247,7 +249,7 @@
 		      <tbody class="data-tbody" id="tbody">
 		        <tr v-for="(it,index) in stdinfoC19" :id="it.ID" :key="index">
 		          <td>{{it.name}}</td>
-		          <td>{{(it.Sex==1)?'女':'男'}}</td>
+		          <td>{{(it.sex==1)?'女':'男'}}</td>
 		          <td>{{it.createTime}}</td>
 		          <td>{{(it.isTherapy==1)?'是':'否'}}</td>
 		          <td>
@@ -436,16 +438,16 @@
           <!-- 个案调查 - 新冠 -->
           <div class="weui-tab__panel" v-bind:style="{display:displayDivC19}">
               <div class="listbox_title">
-                <div>调查表</div>
+                <!-- <div>调查表</div> -->
               </div>
               <div class="fromtitle">
                 <h2>新型冠状病毒肺炎病例个案调查表（第七版）</h2>
               </div>
-              <form-create v-model="fApi" :rule="rule" :option="option" @on-submit="onSubmit1"></form-create>
+              <form-create v-model="fApi" :rule="rule" :option="options" @on-submit="onSubmit1"></form-create>
 			  
 			  <div class="fromtBtn">
 			  <!-- <input class="btn btn-default" runat="server" id="btnSS" @click="close1" type="button" value="关闭" /> -->
-         <!-- <input class="btn btn-default" runat="server" id="btnSS" @click="onSubmit1" type="button" value="提交" /> -->
+         <input class="btn btn-default" runat="server" id="btnSS" @click="onSubmit1" type="button" value="提交" />
          <input class="btn btn-default" runat="server" id="btnSS" @click="close1" type="button" value="关闭" />
 			  </div>
             <!-- </div> -->
@@ -752,6 +754,23 @@
               </div>
             </form>
           </div>
+		 <!-- 初报告 新冠-->
+		 <div class="weui-tab__panel" v-bind:style="{display:displayDiv4C19}">
+              <div class="listbox_title">
+                <!-- <div>调查表</div> -->
+              </div>
+			        <div class="fromtitle">
+                <h2>重庆市渝中区疾病预防控制中心关于一例新型冠状病毒感染的肺炎确诊病例的调查报告</h2>
+              </div>
+              <form-create v-model="fApi" :rule="rule3" :option="options" @on-submit="onSubmit2"></form-create>
+			  
+			  <div class="fromtBtn">
+			  <!-- <input class="btn btn-default" runat="server" id="btnSS" @click="close1" type="button" value="关闭" /> -->
+					<input class="btn btn-default" runat="server" id="btnSS" @click="onSubmit2" type="button" value="提交" />
+					<input class="btn btn-default" runat="server" id="btnSS" @click="close1" type="button" value="关闭" />
+			  </div>
+
+		 </div>
           <!-- 初报告 -->
           <div class="weui-tab__panel" v-bind:style="{display:displayDiv4}">
             <form class="form ui-whitespace margin-top-60" name="samp-form" runat="server" style="font-size: 14px;">
@@ -1150,956 +1169,13 @@
         isEdit_index: '',           // 编辑行的索引
 		
 		// 新冠流调表相关
+		displayDiv4C19:"none",//初报告
 		displayDiv2C19: 'none',	// 一览表
 		displayDivC19: 'none',
 		stdinfoC19: [],			// 一览表数据
     c19List: [],			// 仅展示新冠的列表
     fApi:{},
-    init: [{
-		    type: "input",
-		    field: "userName",
-		    className: "user-name-dom",
-		    title: "1.姓名：",
-		    value: "",
-		    props: {
-		      placeholder: "请输入姓名",
-		      disabled: false,
-		      readonly: false,
-		      clearable: true
-		    },
-		    validate: [{
-		      trigger: "blur",
-		      required: true,
-		      message: "姓名不能为空"
-		    }],
-		  },
-		  {
-		    type: "radio",
-		    field: "sex",
-		    title: "2.性 别：",
-		    value: 0,
-		    options: [{
-		        label: "男",
-		        value: 0
-		      },
-		      {
-		        label: "女",
-		        value: 1
-		      },
-		
-		    ],
-		   
-		  },
-      {
-          type: "input", 
-          field: "aboutId",  
-          title: "3.身份证号：", 
-          value: "", 
-          props: {
-            placeholder: "请输入身份证",
-            disabled: false,
-            readonly: false,
-            clearable: true 
-          },
-          validate: [
-            {
-              trigger: "blur",
-              required: true,
-              message: "身份证不能为空"
-            }
-          ],
-          col: {
-		    
-		      labelWidth: "13%",
-		    }
-        },
-		
-		  {
-		    type: "radio",
-		    field: "outbound",
-		    className: "entry-card",
-		    title: "4.是否为境外输入病例：",
-		
-		    value: 0,
-		    options: [{
-		        label: "是",
-		        value: 1
-		      },
-		      {
-		        label: "否",
-		        value: 2
-		      },
-		
-		    ],
-		    col: {
-		      span: 12,
-		      labelWidth: "40%",
-		    }
-		  },
-		  {
-		    type: "span",
-		    title: "(传染病报告中增加)",
-		    field: "span1",
-		    col: {
-		      span: 12,
-		      labelWidth: "35%",
-		    },
-		  },
-		
-		  {
-		    type: "span",
-		    title: "如是，请填写以下信息：",
-		    field: "tips",
-		    col: {
-		      span: 6,
-		      labelWidth: "70%",
-		    },
-		  },
-		
-		  {
-		    type: "input",
-		    title: "入境前居住或旅行的国家或地区（可多选）：",
-		    field: "live",
-		    col: {
-		      span: 18,
-		      labelWidth: "40%",
-		    },
-		  },
-		
-		  {
-		    type: "input",
-		    field: "area",
-		    title: "入境前途经国家和地区：",
-		    value: "",
-		    col: {
-		      span: 12,
-		      labelWidth: "33%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: "input",
-		    field: "citizenship",
-		    title: "国籍：",
-		    value: "",
-		    col: {
-		      span: 12,
-		      labelWidth: "28%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: "input",
-		    field: "passport",
-		    title: "护照号码：",
-		    value: "",
-		    col: {
-		      span: 12,
-		      labelWidth: "33%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: "input",
-		    field: "entry",
-		    title: "入境口岸：",
-		    value: "",
-		    col: {
-		      span: 12,
-		      labelWidth: "28%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: 'datePicker',
-		    title: '入境日期：',
-		    field: 'section_day',
-		    col: {
-		      span: 12,
-		    }
-		  },
-		
-		  {
-		    type: "select",
-		    title: "入境交通方式：",
-		    field: "trans",
-		    value: "",
-		    props: {
-		      multiple: true,
-		      filterable: true,
-		
-		    },
-		
-		    options: [{
-		        'value': 104,
-		        'label': '轮船'
-		      },
-		      {
-		        'value': 105,
-		        'label': '火车'
-		      },
-		      {
-		        'value': 106,
-		        'label': '飞机'
-		      },
-		    ],
-		    col: {
-		      span: 12,
-		      labelWidth: "28%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: "input",
-		    field: "flight_number",
-		    title: "备注（航班号车次船号）：",
-		    value: "",
-		    props: {
-		      placeholder: "请输入",
-		      disabled: false,
-		      readonly: false,
-		      clearable: true
-		    },
-		    col: {
-		
-		      labelWidth: "18%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: "input",
-		    field: "height",
-		    title: "5.身高(cm)：",
-		    value: "",
-		    props: {
-		      placeholder: "请输入身高",
-		      disabled: false,
-		      readonly: false,
-		      clearable: true
-		    },
-		  },
-		  {
-		    type: "input",
-		    field: "weight",
-		    title: "6.体重(kg)：",
-		    value: "",
-		    props: {
-		      placeholder: "请输入体重",
-		      disabled: false,
-		      readonly: false,
-		      clearable: true
-		    },
-		   
-		  },
-		
-		
-		  {
-		    type: "checkbox",
-		    field: "pathway",
-		    title: "7.病例传播途径",
-		    value: [],
-		    options: [{
-		        label: "主动就诊",
-		        value: 1
-		      },
-		      {
-		        label: "密接管理发现",
-		        value: 2
-		      },
-		      {
-		        label: "入境筛查",
-		        value: 3
-		      },
-		      {
-		        label: "人群主动筛查",
-		        value: 4
-		      },
-		      {
-		        label: "不明原因肺炎、SARI监测发现",
-		        value: 5
-		      },
-		      {
-		        label: "其他",
-		        value: 6
-		      },
-		
-		    ],
-		    col: {
-		
-		      labelWidth: "15%",
-		    }
-		  },
-		
-		  {
-		    type: 'datePicker',
-		    field: "admisdate",
-		    title: "8.入院日期：",
-		    col: {
-		
-		      labelWidth: "14%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		  {
-		    type: "checkbox",
-		    field: "symptom",
-		    title: "9.入院时症状和体征：",
-		    value: [],
-		    options: [{
-		        label: "发热",
-		        value: 1
-		      },
-		      {
-		        label: "寒战",
-		        value: 2
-		      },
-		      {
-		        label: "干咳",
-		        value: 3
-		      },
-		      {
-		        label: "咳痰",
-		        value: 4
-		      },
-		      {
-		        label: "鼻塞",
-		        value: 5
-		      },
-		      {
-		        label: "流涕",
-		        value: 6
-		      },
-		      {
-		        label: "咽痛",
-		        value: 7
-		      },
-		      {
-		        label: "头痛",
-		        value: 8
-		      },
-		      {
-		        label: "乏力",
-		        value: 9
-		      },
-		      {
-		        label: "肌肉酸痛",
-		        value: 10
-		      },
-		      {
-		        label: "关节酸痛",
-		        value: 11
-		      },
-		      {
-		        label: "气促",
-		        value: 12
-		      },
-		      {
-		        label: "呼吸苦难",
-		        value: 13
-		      },
-		      {
-		        label: "胸闷",
-		        value: 14
-		      },
-		      {
-		        label: "结膜充血",
-		        value: 15
-		      },
-		      {
-		        label: "恶心",
-		        value: 16
-		      },
-		      {
-		        label: "呕吐",
-		        value: 17
-		      },
-		      {
-		        label: "腹泻",
-		        value: 18
-		      },
-		      {
-		        label: "腹痛",
-		        value: 19
-		      },
-		      {
-		        label: "其他",
-		        value: 20
-		      },
-		
-		    ],
-		    col: {
-		
-		      labelWidth: "15%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: "radio",
-		    field: "another",
-		    title: "10.有无并发症：",
-		    value: [],
-		    options: [{
-		        label: "有",
-		        value: 1
-		      },
-		      {
-		        label: "无",
-		        value: 2
-		      },
-		
-		    ],
-		    col: {
-		
-		      labelWidth: "15%",
-		      
-		    }
-		  },
-		
-		  {
-		    type: "checkbox",
-		    field: "complication",
-		    title: "如有，请选择(可多选)：",
-		    value: [],
-		    options: [{
-		        label: "脑膜炎",
-		        value: 1
-		      },
-		      {
-		        label: "脑炎",
-		        value: 2
-		      },
-		      {
-		        label: "菌血症",
-		        value: 3
-		      },
-		      {
-		        label: "心肌炎",
-		        value: 4
-		      },
-		      {
-		        label: "急性肺损伤/ARDS",
-		        value: 5
-		      },
-		      {
-		        label: "急性肾损伤",
-		        value: 6
-		      },
-		      {
-		        label: "癫痫",
-		        value: 7
-		      },
-		      {
-		        label: "继发细菌性肺炎",
-		        value: 8
-		      },
-		      {
-		        label: "其他",
-		        value: 9
-		      },
-		    ],
-		    col: {
-		
-		      labelWidth: "17%",
-		
-		    }
-		  },
-		
-		
-		  {
-		    type: "radio",
-		    field: "chest",
-		    title: "11.胸部X线或CT检查是否有新冠肺炎影像学特征：",
-		    value: 0,
-		    options: [{
-		        label: "有",
-		        value: 1
-		      },
-		      {
-		        label: "无",
-		        value: 2
-		      },
-		      {
-		        label: "未检查",
-		        value: 3
-		      },
-		
-		    ],
-		    col: {
-			  
-		      labelWidth: "34%",
-
-		    }
-		  },
-		
-		  {
-		    type: 'datePicker',
-		    field: "chestdate",
-		    title: "如检查，检查日期：",
-		
-		    col: {
-		  
-		      labelWidth: "20%",
-		
-		    }
-		  },
-		
-		  {
-		    type: 'datePicker',
-		    field: "outdate",
-		    title: "12.出院日期：",
-		    value: "",
-		    col: {
-		      labelWidth: "10%",
-		
-		    }
-		  },
-		
-		  {
-		    type: "radio",
-		    field: "occupation",
-		    title: "13.是否为以下特定职业人群：",
-		    value: 0,
-		    options: [{
-		        label: "否",
-		        value: 1
-		      },
-		      {
-		        label: "医务人员",
-		        value: 2
-		      },
-		      {
-		        label: "病原微生物检测人员",
-		        value: 3
-		      },
-		      {
-		        label: "野生动物接触相关人员",
-		        value: 4
-		      },
-		      {
-		        label: "家禽，家畜养殖人员",
-		        value: 5
-		      },
-		      {
-		        label: "农贸市场从业人员",
-		        value: 6
-		      },
-		      {
-		        label: "其他",
-		        value: 7
-		      },
-		    ],
-		    col: {
-		      labelWidth: "20%",
-		    }
-		  },
-		
-		  {
-		    type: "input",
-		    field: "beizhu1",
-		    title: "备注（其他）：",
-		    value: "",
-		    props: {
-		      placeholder: "请输入",
-		      disabled: false,
-		      readonly: false,
-		      clearable: true
-		    },
-		    col: {
-		
-		      labelWidth: "11%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: "radio",
-		    field: "hospit",
-		    title: "如为义务人员，请选择具体工作性质：",
-		    value: 0,
-		    options: [{
-		        label: "医生",
-		        value: 1
-		      },
-		      {
-		        label: "护士",
-		        value: 2
-		      },
-		      {
-		        label: "疾控现场工作人员",
-		        value: 3
-		      },
-		      {
-		        label: "实验室检测人员",
-		        value: 4
-		      },
-		      {
-		        label: "其他",
-		        value: 5
-		      },
-		    ],
-		    col: {
-		      labelWidth: "26%",
-		    }
-		  },
-		
-		  {
-		    type: "input",
-		    field: "beizhu2",
-		    title: "备注（其他）：",
-		    value: "",
-		    props: {
-		      placeholder: "请输入",
-		      disabled: false,
-		      readonly: false,
-		      clearable: true
-		    },
-		    col: {
-		
-		      labelWidth: "11%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: "radio",
-		    field: "pregnant",
-		    title: "14.是否为孕妇：",
-		    value: 0,
-		    options: [{
-		        label: "是",
-		        value: 1
-		      },
-		      {
-		        label: "否",
-		        value: 2
-		      },
-		    ],
-		    col: {
-		      span: 12,
-		      labelWidth: "24%",
-		    }
-		  },
-		
-		  {
-		    type: "input",
-		    field: "oddweek",
-		    title: "如是，孕周为：",
-		    value: "",
-		    props: {
-		      placeholder: "请输入",
-		      disabled: false,
-		      readonly: false,
-		      clearable: true
-		    },
-		    col: {
-		      span: 12,
-		      labelWidth: "24%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: "radio",
-		    field: "smoke",
-		    title: "15.是否为吸烟：",
-		    value: 0,
-		    options: [{
-		        label: "经常吸(每天吸卷烟一支以上，连续或累计6个月)",
-		        value: 1
-		      },
-		      {
-		        label: "偶尔吸（每周吸卷烟4支以上，但平均每天不足1支）",
-		        value: 2
-		      },
-		      {
-		        label: "从不吸烟",
-		        value: 3
-		      },
-		    ],
-		
-		  },
-		
-		  {
-		    type: "select",
-		    field: "history",
-		    title: "16.既往病史和基本情况(可多选)：",
-		    value: [],
-		    col: {
-		      span: 14
-		    },
-		    props: {
-		      multiple: true,
-		      placement: "bottom"
-		    },
-		    options: [{
-		        label: "无",
-		        value: 1
-		      },
-		      {
-		        label: "高血压",
-		        value: 2
-		      },
-		      {
-		        label: "糖尿病",
-		        value: 3
-		      },
-		      {
-		        label: "心血管疾病",
-		        value: 4
-		      },
-		      {
-		        label: "哮喘",
-		        value: 5
-		      },
-		      {
-		        label: "慢性肺部疾病",
-		        value: 6
-		      },
-		      {
-		        label: "肿瘤",
-		        value: 7
-		      },
-		      {
-		        label: "慢性肾病",
-		        value: 8
-		      },
-		      {
-		        label: "慢性肝病",
-		        value: 9
-		      },
-		      {
-		        label: "免疫缺陷类疾病",
-		        value: 10
-		      },
-		      {
-		        label: "产后（6周以内）",
-		        value: 11
-		      },
-		      {
-		        label: "其他",
-		        value: 12
-		      }
-		    ],
-		    col: {
-		      labelWidth: "23%",
-		    }
-		  },
-		
-		  {
-		    type: "input",
-		    field: "beizhu3",
-		    title: "备注（其他）：",
-		    value: "",
-		    props: {
-		      placeholder: "请输入",
-		      disabled: false,
-		      readonly: false,
-		      clearable: true
-		    },
-		    col: {
-		
-		      labelWidth: "11%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		  {
-		    type: "radio",
-		    field: "aboutadress",
-		    title: "17.是否曾经到过境内确诊病例或无症状感染者报告的社区：",
-		    value: 0,
-		    options: [{
-		        label: "居住史",
-		        value: 1
-		      },
-		      {
-		        label: "旅行史",
-		        value: 2
-		      },
-		      {
-		        label: "否",
-		        value: 3
-		      },
-		    ],
-		    col: {
-		
-		      labelWidth: "40%",
-		    }
-		  },
-		
-		  {
-		    type: "input",
-		    field: "adresshistry",
-		    title: "如是，请填写：",
-		    value: "",
-		    props: {
-		      placeholder: "请输入xx省xx市xx县",
-		      disabled: false,
-		      readonly: false,
-		      clearable: true
-		    },
-		    col: {
-		      // span: 12,
-		      labelWidth: "11%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		
-		  {
-		    type: "radio",
-		    field: "overadress",
-		    title: "18.是否有境外疫情国家或地区的旅行史或居住史：",
-		    value: 0,
-		    options: [{
-		        label: "居住史",
-		        value: 1
-		      },
-		      {
-		        label: "旅行史",
-		        value: 2
-		      },
-		      {
-		        label: "否",
-		        value: 3
-		      },
-		    ],
-		    col: {
-		
-		      labelWidth: "35%",
-		    }
-		  },
-		  {
-		    type: "input",
-		    field: "overhistry",
-		    title: "如有，请填写国家或地区：",
-		    value: "",
-		    props: {
-		      placeholder: "请输入xx国家 or xx地区",
-		      disabled: false,
-		      readonly: false,
-		      clearable: true
-		    },
-		    col: {
-		      labelWidth: "20%",
-		      // labelWidth:"22%",
-		    }
-		  },
-		
-		
-		  {
-		    type: "radio",
-		    field: "touch",
-		    title: "19.是否接触过来自境内有确诊病例或无症状感染者报告社区的发热和/或呼吸道症状的患者：",
-		    value: 0,
-		    options: [{
-		        label: "是",
-		        value: 1
-		      },
-		      {
-		        label: "否",
-		        value: 2
-		      },
-		      {
-		        label: "不清楚",
-		        value: 3
-		      },
-		    ],
-		    col: {
-		
-		      labelWidth: "60%",
-		    }
-		  },
-		
-		  {
-		    type: "radio",
-		    field: "toucharea",
-		    title: "20.是否接触过来自境外有疫情国家或地区的发热和/或呼吸道症状的患者：",
-		    value: 0,
-		    options: [{
-		        label: "是",
-		        value: 1
-		      },
-		      {
-		        label: "否",
-		        value: 2
-		      },
-		      {
-		        label: "不清楚",
-		        value: 3
-		      },
-		    ],
-		    col: {
-		
-		      labelWidth: "50%",
-		    }
-		  },
-		
-		  {
-		    type: "radio",
-		    field: "touchhistry",
-		    title: "21.是否曾有确诊病例或无症状感染者的接触史：",
-		    value: 0,
-		    options: [{
-		        label: "是",
-		        value: 1
-		      },
-		      {
-		        label: "否",
-		        value: 2
-		      },
-		      {
-		        label: "不清楚",
-		        value: 3
-		      },
-		    ],
-		    col: {
-		
-		      labelWidth: "32%",
-		    }
-		  },
-		
-		  {
-		    type: "radio",
-		    field: "eare_pulic",
-		    title: "22.患者同一家庭、办公室、学校或托幼机构班级、车间等集体单位是否有聚集性发病：",
-		    value: 0,
-		    options: [{
-		        label: "是",
-		        value: 1
-		      },
-		      {
-		        label: "否",
-		        value: 2
-		      },
-		      {
-		        label: "不清楚",
-		        value: 3
-		      },
-		    ],
-		    col: {
-		
-		      labelWidth: "57%",
-		    }
-		  },
-		  {
-            type:'input',
-            field:'info',
-            title:'备注信息',
-            value: '',
-              props:{
-                    type:'textarea'
-                    }
-           },
-		],
-     
+    
 	rule: [{
 		    type: "input",
 		    field: "userName",
@@ -3988,12 +3064,1001 @@
                     }
            },
 		],
+	rule3: [
+         {
+        type: "span",
+        title: "区卫生健康委：",
+        field: "titlefrom",
+        },
+        {
+        type: "DatePicker",
+        field: "aboutday",
+        value: '',
+        props: {
+          "type": "datetime",
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "placeholder": "请选择活动日期",
+        },
+        col: {
+              
+             span: 6,
+            }
+       },
+     
+        {
+          type: "input", 
+          field: "patient", 
+          title: "我中心接某疾病预防控制中心通报：该区收治", 
+          value: "", 
+          props: {
+            placeholder: "请输入",
+            disabled: false,
+            readonly: false,
+            clearable: true 
+          },
+          col: {
+           span: 9 ,
+            labelWidth:"80%",
+    
+          }
+        },
+        {
+        type: "span",
+        title: "例新冠状病毒感染确诊病例，患者为该病例的密切接触者",
+        field: "titleword",
+        col: {
+             span: 9  ,
+            labelWidth:"100%",
+          }
+        },
+         {
+          type: "input", 
+          field: "hotelname", 
+          title: "我中心立即将其转运至", 
+          value: "", 
+          props: {
+            placeholder: "请输入酒店",
+            disabled: false,
+            readonly: false,
+            clearable: true 
+          },
+          col: {
+             span: 7,
+            labelWidth:"55%",
+    
+          }
+        },
+        
+        {
+        type: "span",
+        title: "酒店进行隔离、采样，并经过实验室新型冠状病毒核酸检测为:",
+        field: "pass",
+        col: {
+            span: 10  ,
+            labelWidth:"98%",
+          }
+        },
+        {
+          type: "select",
+          field: "reason",
+          title: "",
+          value: [],
+          col: {
+            span: 3
+          },
+          options: [
+            { label: "阳性", value: 1 },
+            { label: "阴性", value: 2,},
+          
+          ]
+        },
+        {
+        type: "span",
+        title: "区疾控中心立即将结果上",
+        field: "aboutdisease",
+        col: {
+           span: 4 ,
+            labelWidth:"100%",
+          }
+        },
+        {
+        type: "span",
+        title: "报区卫健委及重庆市疾控中心，将患者送往重庆市急救中心就诊,经专家组会诊诊断为新冠确诊病例。",
+        field: "about",
+        col: {
+           span: 16 ,
+            labelWidth:"100%",
+          }
+        },
+        {
+        type: "span",
+        title: "同时我中心立即指派流行病学人员开展调查核实和",
+        field: "anway",
+        col: {
+            span: 8 ,
+            labelWidth:"100%",
+          }
+        },
+          {
+        type: "DatePicker",
+        field: "date",
+        value: '',
+        title: "流行病学调查，",
+        props: {
+          "type": "datetime",
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "placeholder": "请选择活动日期",
+        },
+        col: {
+              labelWidth:"28%",
+               span: 9,
+            }
+       },
+      
+        {
+        type: "span",
+        title: "中心派人前往现场开展疫情防控工作。现将调查处置情况汇报如下：",
+        field: "finally",
+        col: {
+           span: 11 ,
+            labelWidth:"100%",
+          }
+        },
+        {
+        type: "span",
+        title: "一、确诊病例调查情况",
+        field: "first",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+        {
+        type: "span",
+        title: "（一）患者基本情况",
+        field: "aboutfirst",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+
+        {
+				type: "input",
+				field: "userName",
+				title: "姓名：",
+				value: "",
+				props: {
+				placeholder: "请输入姓名",
+				disabled: false,
+				readonly: false,
+				clearable: true
+        },
+        col: {
+            span: 6,
+            labelWidth:"21%",
+    
+          }
+			},
+			{
+				type: "radio",
+				field: "sex",
+				title: "性 别：",
+				value: 0,
+				options: [{
+					label: "男",
+					value: 0
+				},
+				{
+					label: "女",
+					value: 1
+        }],
+        col: {
+             span: 6,
+            labelWidth:"26%",
+    
+          }
+			
+      },
+      {
+				type: "input",
+				field: "phone",
+				title: "电话：",
+				value: "",
+				props: {
+				placeholder: "请输入电话",
+				disabled: false,
+				readonly: false,
+				clearable: true
+        },
+        col: {
+            span: 6,
+            labelWidth:"20%",
+    
+          }
+      },
+      {
+				type: "input",
+				field: "age",
+				title: "年龄：",
+				value: "",
+				props: {
+				placeholder: "请输入年龄",
+				disabled: false,
+				readonly: false,
+				clearable: true
+        },
+        col: {
+            span: 6,
+            labelWidth:"20%",
+    
+          }
+      },
+      	{
+			type: "input", 
+			field: "nation",  
+			title: "民族：", 
+			value: "", 
+			props: {
+				placeholder: "请输入民族",
+				disabled: false,
+				readonly: false,
+				clearable: true 
+			},
+			
+			col: {
+			  span: 6,
+				labelWidth: "21%",
+				}
+			},
+      
+		{
+			type: "input", 
+			field: "aboutId",  
+			title: "身份证号：", 
+			value: "", 
+			props: {
+				placeholder: "请输入身份证",
+				disabled: false,
+				readonly: false,
+				clearable: true 
+			},
+			
+			col: {
+				 span: 6,
+				labelWidth: "30%",
+				}
+      },
+      {
+			type: "input", 
+			field: "work",  
+			title: "工作：", 
+			value: "", 
+			props: {
+				placeholder: "请输入工作",
+				disabled: false,
+				readonly: false,
+				clearable: true 
+			},
+			
+			col: {
+			  span: 6,
+				labelWidth: "20%",
+				}
+      },
+      {
+			type: "input", 
+			field: "adress",  
+			title: "家庭住址：", 
+			value: "", 
+			props: {
+				placeholder: "请输入家庭住址",
+				disabled: false,
+				readonly: false,
+				clearable: true 
+			},
+			
+			col: {
+			  span: 6,
+				labelWidth: "33%",
+				}
+			},
+			 {
+			type: "input", 
+			field: "famliy",  
+			title: "家庭成员：", 
+			value: "", 
+			props: {
+				placeholder: "请输入家庭成员",
+				disabled: false,
+				readonly: false,
+				clearable: true 
+			},
+			
+			col: {
+			//   span: 6,
+				labelWidth: "8%",
+				}
+			},
+	
+       {
+        type: "span",
+        title: "（二）患者发病及就诊经过",
+        field: "abouttwo",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+    
+        {
+        type: "DatePicker",
+        field: "illdate",
+        title: "患者于",
+        value: '',
+        props: {
+          "type": "datetime",
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "placeholder": "请选择日期",
+        },
+        col: {
+              labelWidth:"25%",
+             span: 8 ,
+            }
+       },
+       {
+        type: "input", 
+        field: "symptom",  
+        title: "出现症状为：", 
+        value: "", 
+        props: {
+          placeholder: "请输入症状",
+          disabled: false,
+          readonly: false,
+          clearable: true 
+        },
+        
+        col: {
+           span: 8,
+          labelWidth: "38%",
+          }
+      },
+      
+       
+        {
+				type:'input',
+				field:'infopass',
+				title:'备注经过',
+				value: '2月2日经外区通报，患者作为确诊病例的密切接触者***公园酒店。2月3日，我中心对医学观察在***酒店的密切接触者进行采样、检测，并经过实验室新型冠状病毒核酸检测阳性，为确诊病例。',
+				props:{
+						type:'textarea'
+          },
+           col: {
+             
+            labelWidth:"8%",
+          }
+      },
+      {
+        type: "span",
+        title: "（三）流行病学调查情况：",
+        field: "three_about",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+
+        {
+				type:'input',
+				field:'passabout',
+				// title:'备注信息',
+				value: '1、类似病例接触情况经现场调查，患者发病前14天无湖北省旅游史或居住史。根据患者自述及沙坪坝区疾控中心通报疫情信息，2月2日工作地点的一位同事被诊断为新型冠状病毒感染的肺炎确诊病例，并于患者共事数日。2、农贸市场活动史病例否认发病前14天农贸市场活动史。3、家庭居住及暴露情况病例家中及邻居家未饲养宠物，未接触过其他动物。4、发病前14天至被隔离治疗前活动情况患者自述发病前14天无外出史、旅游史，主要活动地点在家和单位。1月18日至23日患者早上8:30出门，乘坐公交412路，于9点到达上班地点****店，工作到17点或20点30分（具体早晚班，患者会想不起）。（往返于***公交站、**公交站）1月24日居家聚餐，与老公哥哥一家5口人共同就餐。1月26日14时患者乘坐公交412路，从家到***店协助消杀，17时乘坐公交412路回家。1月28日患者因妇科问题步行就诊于陆军特色医疗中心妇科及相关检验科室。1月30日9时30分患者自驾带女儿就诊于陆军特色医疗中心儿科。13时自驾回家。1月31日9时患者乘公交412路前往***与3名员工核算工资，16时乘公交回家并居家。2月1日9时乘坐公交前往医院为女儿输水，11时步行去其老公的****店就餐，11时30分于****超市购物1小时，步行回家后，又于17时在****购物10分钟，后居家。2月3日被送往****酒店隔离观',
+				props:{
+						type:'textarea'
+					}
+      },
+      {
+        type: "span",
+        title: "二、事件性质",
+        field: "second",
+        col: {
+            labelWidth:"100%",
+          }
+		},
+		 {
+          type: "input", 
+          field: "message", 
+          title: "根据《新型冠状病毒感染的肺炎疫情社区防控工作方案（试行）》，本起事件目前在患者工作地点出现", 
+          value: "", 
+          props: {
+            placeholder: "请输入",
+            disabled: false,
+            readonly: false,
+            clearable: true 
+          },
+          col: {
+           span: 18,
+            labelWidth:"90%",
+    
+          }
+        },
+        {
+        type: "span",
+        title: "例病例，应按照方案“聚集疫情",
+        field: "aboutsecond",
+        col: {
+            span: 6 ,
+            labelWidth:"100%",
+          }
+        },
+         
+        {
+        type: "span",
+        title: "防控策略及措施”启动第（二）类响应。",
+        field: "step",
+        col: {
+            span: 10 ,
+            labelWidth:"100%",
+          }
+        },
+        {
+        type: "span",
+        title: "三、防控措施",
+        field: "three",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+         {
+        type: "span",
+        title: "渝中区疾病预防控制中心到现场开展流行病学调查和防控工作，具体措施如下：",
+        field: "aboutthree",
+        col: {
+            labelWidth:"90%",
+          }
+        },
+        {
+				type:'input',
+				field:'infothree',
+				// title:'备注信息',
+				value: '（一）确定疫点管理将居住地菜袁路****、工作地点****店确定为疫点，立即实施疫点管理。（二）确定密切接触者区疾病控制中心专业人员详细调查密切接触者，目前能明确的密切接触者共计3名，按照国家标准进行管理。2月3日，将均无症状的患者丈夫、婆婆、女儿转运至现****酒店隔离观察。（三）开展疫点处置和指导加强消杀区疾控中心已派出专业人员赴疫点患者住家、楼栋公共环境、小区外环境及病例停留较多的场所开展彻底的终末消杀。',
+				props:{
+						type:'textarea'
+						}
+      },
+      {
+        type: "span",
+        title: "四、病例感染来源推测",
+        field: "four",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+        {
+				type:'input',
+				field:'infofour',
+				// title:'备注信息',
+				value: '经现场调查，患者否认发病前14天湖北省旅游史或居住史， 工作地点的员工中已有确诊病例，且与确诊病例有接触，目前包括患者在内已有5人先后被确诊为新型冠状病毒感染的肺炎确诊病例。结合流行病学史，可认为患者为二代病例，其感染来源可能为沙坪坝区某确诊病例',
+				props:{
+						type:'textarea'
+						}
+      },
+       {
+        type: "span",
+        title: "五、疫情趋势预测",
+        field: "five",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+        {
+				type:'input',
+				field:'infofive',
+				// title:'备注信息',
+				value: ' 患者丈夫、婆婆、女儿虽暂时无症状症状，但不能排除出现家庭聚集性病例疫情的可能。',
+				props:{
+            type:'textarea',
+						}
+      },
+      
+	],
+	rule4: [
+         {
+        type: "span",
+        title: "区卫生健康委：",
+        field: "titlefrom",
+        },
+        {
+        type: "DatePicker",
+        field: "aboutday",
+        value: '',
+        props: {
+          "type": "datetime",
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "placeholder": "请选择活动日期",
+        },
+        col: {
+              
+             span: 6,
+            }
+       },
+     
+        {
+          type: "input", 
+          field: "patient", 
+          title: "我中心接某疾病预防控制中心通报：该区收治", 
+          value: "", 
+          props: {
+            placeholder: "请输入",
+            disabled: false,
+            readonly: false,
+            clearable: true 
+          },
+          col: {
+           span: 9 ,
+            labelWidth:"80%",
+    
+          }
+        },
+        {
+        type: "span",
+        title: "例新冠状病毒感染确诊病例，患者为该病例的密切接触者",
+        field: "titleword",
+        col: {
+             span: 9  ,
+            labelWidth:"100%",
+          }
+        },
+         {
+          type: "input", 
+          field: "hotelname", 
+          title: "我中心立即将其转运至", 
+          value: "", 
+          props: {
+            placeholder: "请输入酒店",
+            disabled: false,
+            readonly: false,
+            clearable: true 
+          },
+          col: {
+             span: 7,
+            labelWidth:"55%",
+    
+          }
+        },
+        
+        {
+        type: "span",
+        title: "酒店进行隔离、采样，并经过实验室新型冠状病毒核酸检测为:",
+        field: "pass",
+        col: {
+            span: 10  ,
+            labelWidth:"98%",
+          }
+        },
+        {
+          type: "select",
+          field: "reason",
+          title: "",
+          value: [],
+          col: {
+            span: 3
+          },
+          options: [
+            { label: "阳性", value: 1 },
+            { label: "阴性", value: 2,},
+          
+          ]
+        },
+        {
+        type: "span",
+        title: "区疾控中心立即将结果上",
+        field: "aboutdisease",
+        col: {
+           span: 4 ,
+            labelWidth:"100%",
+          }
+        },
+        {
+        type: "span",
+        title: "报区卫健委及重庆市疾控中心，将患者送往重庆市急救中心就诊,经专家组会诊诊断为新冠确诊病例。",
+        field: "about",
+        col: {
+           span: 16 ,
+            labelWidth:"100%",
+          }
+        },
+        {
+        type: "span",
+        title: "同时我中心立即指派流行病学人员开展调查核实和",
+        field: "anway",
+        col: {
+            span: 8 ,
+            labelWidth:"100%",
+          }
+        },
+          {
+        type: "DatePicker",
+        field: "date",
+        value: '',
+        title: "流行病学调查，",
+        props: {
+          "type": "datetime",
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "placeholder": "请选择活动日期",
+        },
+        col: {
+              labelWidth:"28%",
+               span: 9,
+            }
+       },
+      
+        {
+        type: "span",
+        title: "中心派人前往现场开展疫情防控工作。现将调查处置情况汇报如下：",
+        field: "finally",
+        col: {
+           span: 11 ,
+            labelWidth:"100%",
+          }
+        },
+        {
+        type: "span",
+        title: "一、确诊病例调查情况",
+        field: "first",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+        {
+        type: "span",
+        title: "（一）患者基本情况",
+        field: "aboutfirst",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+
+        {
+				type: "input",
+				field: "userName",
+				title: "姓名：",
+				value: "",
+				props: {
+				placeholder: "请输入姓名",
+				disabled: false,
+				readonly: false,
+				clearable: true
+        },
+        col: {
+            span: 6,
+            labelWidth:"21%",
+    
+          }
+			},
+			{
+				type: "radio",
+				field: "sex",
+				title: "性 别：",
+				value: 0,
+				options: [{
+					label: "男",
+					value: 0
+				},
+				{
+					label: "女",
+					value: 1
+        }],
+        col: {
+             span: 6,
+            labelWidth:"26%",
+    
+          }
+			
+      },
+      {
+				type: "input",
+				field: "phone",
+				title: "电话：",
+				value: "",
+				props: {
+				placeholder: "请输入电话",
+				disabled: false,
+				readonly: false,
+				clearable: true
+        },
+        col: {
+            span: 6,
+            labelWidth:"20%",
+    
+          }
+      },
+      {
+				type: "input",
+				field: "age",
+				title: "年龄：",
+				value: "",
+				props: {
+				placeholder: "请输入年龄",
+				disabled: false,
+				readonly: false,
+				clearable: true
+        },
+        col: {
+            span: 6,
+            labelWidth:"20%",
+    
+          }
+      },
+      	{
+			type: "input", 
+			field: "nation",  
+			title: "民族：", 
+			value: "", 
+			props: {
+				placeholder: "请输入民族",
+				disabled: false,
+				readonly: false,
+				clearable: true 
+			},
+			
+			col: {
+			  span: 6,
+				labelWidth: "21%",
+				}
+			},
+      
+		{
+			type: "input", 
+			field: "aboutId",  
+			title: "身份证号：", 
+			value: "", 
+			props: {
+				placeholder: "请输入身份证",
+				disabled: false,
+				readonly: false,
+				clearable: true 
+			},
+			
+			col: {
+				 span: 6,
+				labelWidth: "30%",
+				}
+      },
+      {
+			type: "input", 
+			field: "work",  
+			title: "工作：", 
+			value: "", 
+			props: {
+				placeholder: "请输入工作",
+				disabled: false,
+				readonly: false,
+				clearable: true 
+			},
+			
+			col: {
+			  span: 6,
+				labelWidth: "20%",
+				}
+      },
+      {
+			type: "input", 
+			field: "adress",  
+			title: "家庭住址：", 
+			value: "", 
+			props: {
+				placeholder: "请输入家庭住址",
+				disabled: false,
+				readonly: false,
+				clearable: true 
+			},
+			
+			col: {
+			  span: 6,
+				labelWidth: "33%",
+				}
+			},
+			 {
+			type: "input", 
+			field: "famliy",  
+			title: "家庭成员：", 
+			value: "", 
+			props: {
+				placeholder: "请输入家庭成员",
+				disabled: false,
+				readonly: false,
+				clearable: true 
+			},
+			
+			col: {
+			//   span: 6,
+				labelWidth: "8%",
+				}
+			},
+			
+    
+       {
+        type: "span",
+        title: "（二）患者发病及就诊经过",
+        field: "abouttwo",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+    
+        {
+        type: "DatePicker",
+        field: "illdate",
+        title: "患者于",
+        value: '',
+        props: {
+          "type": "datetime",
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "placeholder": "请选择日期",
+        },
+        col: {
+              labelWidth:"25%",
+             span: 8 ,
+            }
+       },
+       {
+        type: "input", 
+        field: "symptom",  
+        title: "出现症状为：", 
+        value: "", 
+        props: {
+          placeholder: "请输入症状",
+          disabled: false,
+          readonly: false,
+          clearable: true 
+        },
+        
+        col: {
+           span: 8,
+          labelWidth: "38%",
+          }
+      },
+      
+       
+        {
+				type:'input',
+				field:'infopass',
+				title:'备注经过',
+				value: '2月2日经外区通报，患者作为确诊病例的密切接触者***公园酒店。2月3日，我中心对医学观察在***酒店的密切接触者进行采样、检测，并经过实验室新型冠状病毒核酸检测阳性，为确诊病例。',
+				props:{
+						type:'textarea'
+          },
+           col: {
+             
+            labelWidth:"8%",
+          }
+      },
+      {
+        type: "span",
+        title: "（三）流行病学调查情况：",
+        field: "three_about",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+
+        {
+				type:'input',
+				field:'passabout',
+				// title:'备注信息',
+				value: '1、类似病例接触情况经现场调查，患者发病前14天无湖北省旅游史或居住史。根据患者自述及沙坪坝区疾控中心通报疫情信息，2月2日工作地点的一位同事被诊断为新型冠状病毒感染的肺炎确诊病例，并于患者共事数日。2、农贸市场活动史病例否认发病前14天农贸市场活动史。3、家庭居住及暴露情况病例家中及邻居家未饲养宠物，未接触过其他动物。4、发病前14天至被隔离治疗前活动情况患者自述发病前14天无外出史、旅游史，主要活动地点在家和单位。1月18日至23日患者早上8:30出门，乘坐公交412路，于9点到达上班地点****店，工作到17点或20点30分（具体早晚班，患者会想不起）。（往返于***公交站、**公交站）1月24日居家聚餐，与老公哥哥一家5口人共同就餐。1月26日14时患者乘坐公交412路，从家到***店协助消杀，17时乘坐公交412路回家。1月28日患者因妇科问题步行就诊于陆军特色医疗中心妇科及相关检验科室。1月30日9时30分患者自驾带女儿就诊于陆军特色医疗中心儿科。13时自驾回家。1月31日9时患者乘公交412路前往***与3名员工核算工资，16时乘公交回家并居家。2月1日9时乘坐公交前往医院为女儿输水，11时步行去其老公的****店就餐，11时30分于****超市购物1小时，步行回家后，又于17时在****购物10分钟，后居家。2月3日被送往****酒店隔离观',
+				props:{
+						type:'textarea'
+					}
+      },
+      {
+        type: "span",
+        title: "二、事件性质",
+        field: "second",
+        col: {
+            labelWidth:"100%",
+          }
+		},
+		 {
+          type: "input", 
+          field: "message", 
+          title: "根据《新型冠状病毒感染的肺炎疫情社区防控工作方案（试行）》，本起事件目前在患者工作地点出现", 
+          value: "", 
+          props: {
+            placeholder: "请输入",
+            disabled: false,
+            readonly: false,
+            clearable: true 
+          },
+          col: {
+           span: 18,
+            labelWidth:"90%",
+    
+          }
+        },
+        {
+        type: "span",
+        title: "例病例，应按照方案“聚集疫情",
+        field: "aboutsecond",
+        col: {
+            span: 6 ,
+            labelWidth:"100%",
+          }
+        },
+         
+        {
+        type: "span",
+        title: "防控策略及措施”启动第（二）类响应。",
+        field: "step",
+        col: {
+            span: 10 ,
+            labelWidth:"100%",
+          }
+        },
+        {
+        type: "span",
+        title: "三、防控措施",
+        field: "three",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+         {
+        type: "span",
+        title: "渝中区疾病预防控制中心到现场开展流行病学调查和防控工作，具体措施如下：",
+        field: "aboutthree",
+        col: {
+            labelWidth:"90%",
+          }
+        },
+        {
+				type:'input',
+				field:'infothree',
+				// title:'备注信息',
+				value: '（一）确定疫点管理将居住地菜袁路****、工作地点****店确定为疫点，立即实施疫点管理。（二）确定密切接触者区疾病控制中心专业人员详细调查密切接触者，目前能明确的密切接触者共计3名，按照国家标准进行管理。2月3日，将均无症状的患者丈夫、婆婆、女儿转运至现****酒店隔离观察。（三）开展疫点处置和指导加强消杀区疾控中心已派出专业人员赴疫点患者住家、楼栋公共环境、小区外环境及病例停留较多的场所开展彻底的终末消杀。',
+				props:{
+						type:'textarea'
+						}
+      },
+      {
+        type: "span",
+        title: "四、病例感染来源推测",
+        field: "four",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+        {
+				type:'input',
+				field:'infofour',
+				// title:'备注信息',
+				value: '经现场调查，患者否认发病前14天湖北省旅游史或居住史， 工作地点的员工中已有确诊病例，且与确诊病例有接触，目前包括患者在内已有5人先后被确诊为新型冠状病毒感染的肺炎确诊病例。结合流行病学史，可认为患者为二代病例，其感染来源可能为沙坪坝区某确诊病例',
+				props:{
+						type:'textarea'
+						}
+      },
+       {
+        type: "span",
+        title: "五、疫情趋势预测",
+        field: "five",
+        col: {
+            labelWidth:"100%",
+          }
+        },
+        {
+				type:'input',
+				field:'infofive',
+				// title:'备注信息',
+				value: ' 患者丈夫、婆婆、女儿虽暂时无症状症状，但不能排除出现家庭聚集性病例疫情的可能。',
+				props:{
+            type:'textarea',
+						}
+      },
+      
+    ],
 	option: {
       resetBtn: true,
       submitBtn:true,
       onSubmit:(formData)=>{
-        console.log(this.rule)
-         console.log(formData);
+        // console.log(this.rule)
+        //  console.log(formData);
          for(let a in formData){
            for(let i = 0;i<this.rule.length;i++){
              if(this.rule[i].field==a){
@@ -4001,6 +4066,7 @@
              }
            }
          }
+        //  debugger
 		 this.saveForm()
 
       },
@@ -4008,6 +4074,24 @@
       // resetBtn: false,
       // submitBtn:false
 	},
+	options: {
+      resetBtn: false,
+      submitBtn:false,
+      onSubmit:(formData)=>{
+        // console.log(this.rule)
+        //  console.log(formData);
+         for(let a in formData){
+           for(let i = 0;i<this.rule.length;i++){
+             if(this.rule[i].field==a){
+               this.rule[i].value = formData[a]
+             }
+           }
+         }
+		//  this.saveForm()
+
+      },
+	},
+	
     
     }
     },   
@@ -4027,14 +4111,24 @@
 		if( !!res ){
 			this.$setCookie('aToken', `Bearer ${res.data.content}`);
 		}
+
+		//rule进行深拷贝清空rule
+		const aa = JSON.parse(JSON.stringify(this.rule))
+	 	this.defaultAddForm = aa
+	 	// this.defaultAddForm = JSON.parse(JSON.stringify(this.rule))
 	},
 	computed:{
 		selectC19(){
 			let newList = [];
 			for( let i=0,len=this.list.length;i<len;i++ ){
-				let aa = this.list[i];
+          console.log(this.list,"aaaaaaaa")
+          console.log(JSON.stringify(this.list),"111")
+        let aa = this.list[i];
+        console.log(this.list,"aaaaaaaa")
 				if( aa.Name==='新冠病毒' || aa.Name==='新冠肺炎' ){
-					this.c19List.push(aa);
+          
+          this.c19List.push(aa);
+          
 				}else{
 					newList.push(aa);
 				}
@@ -4044,6 +4138,52 @@
 	},
   methods: {
 
+	// 获取旧事件id
+	oddevent(){
+
+	  //  debugger
+	// this.$http.get('/c19/public/event/add/'+this.Aid,  {
+		this.$http.get('/c19/public/event/add/'+this.Aid,  {
+		    headers: {
+		      'Authorization': this.$getCookie('aToken'),
+		    },
+		    emulateJSON: true
+		  }).then((res) => {
+			  console.log(res)
+			 
+		  }).catch(err => {
+        this.$message("访问接口失败或登录过期");
+        setTimeout(()=>{
+              this.$router.push({path:'/EIndex'});
+         },4000)
+        
+		  })
+	},
+    //关闭表单
+    closefn(){
+      this.showform = false;
+    },
+
+    oddevent1(id){
+
+	  //  debugger
+	  this.eid =id
+		this.$http.get('/c19/public/event/add/'+this.eid,  {
+		    headers: {
+		      'Authorization': this.$getCookie('aToken'),
+		    },
+		    emulateJSON: true
+		  }).then((res) => {
+			  console.log(res)
+			 
+		  }).catch(err => {
+        this.$message("访问接口失败或登录过期");
+        setTimeout(()=>{
+              this.$router.push({path:'/EIndex'});
+         },4000)
+        
+		  })
+	},
     //关闭表单
     closefn(){
       this.showform = false;
@@ -4080,6 +4220,7 @@
 					type: 'success'
 				  });
 				  _this.rule = _this.rule2
+				
 				//   this.close1();
 			  }else{
 				  _this.$message({
@@ -4088,10 +4229,58 @@
 				  });
 			  }
 		  }).catch(err => {
-		    this.$message("访问接口失败");
+			this.$message("访问接口失败或登录过期");
+			setTimeout(()=>{
+              _this.$router.push({path:'/EIndex'});
+            },1000)
 		  })
 	
-    },
+	},
+   //提交初报告
+	async onSubmit2(formData) {
+      let _this = this;
+      //流调表添加填写
+      // debugger
+		  let data = {
+		   questionnaire:{ 
+          formData: {
+		      rule: _this.rule3
+        },
+         name: '初报告1',//初报告1
+		 tableType: 3,
+        },
+		eventId:_this.Aid,
+		id:questionId==-1?null:questionId
+		  }
+		  let dataJSON = JSON.stringify(data)
+        await  this.$http.post('/c19/questionnaire/save', dataJSON, {
+		    headers: {
+		      'Authorization': this.$getCookie('aToken'),
+		    },
+		    emulateJSON: true
+		  }).then((res) => {
+			  if(res){
+				  _this.$message({
+					message: '提交成功',
+					type: 'success'
+				  });
+				_this.rule3 =_this.rule4
+			  }else{
+				  _this.$message({
+					message: '提交失败',
+					type: 'error'
+				  });
+			  }
+		  }).catch(err => {
+			this.$message("访问接口失败");
+			setTimeout(()=>{
+              _this.$router.push({path:'/EIndex'});
+            },1000)
+			
+		  })
+	
+	},
+	
     
       // 好多好多方法
         upfile() {
@@ -4123,14 +4312,18 @@
           }).catch(err => {
             this.$message("访问接口失败");
           })
-        },
-		// 一览表数据 - 新冠
-		  async StdInfoC(_id, _id1){
+		},
+		
+    // 一览表数据 - 新冠
+    
+      async StdInfoC(_id){
+        // debugger
       /*接口请求*/
       this.eid = _id;
+      this.oddevent1(this.eid);
       const res = await this.$http.get(`/c19/event/schedule/`+this.eid,{ headers: { 'Authorization': this.$getCookie('aToken') }, emulateJSON: true });
 			// const res = await this.$http.get(`/c19/event/schedule/${this.eid}`,{ headers: { 'Authorization': this.$getCookie('aToken') }, emulateJSON: true });
-      console.log(res);
+      // console.log(res);
       //  console.log(res.data.data);
 			// if (res.body.result.length > 0 && res.body.result != "结果为空") {
 			if (res.body.length > 0 && res.body!="结果为空" && res.body!=[]) {
@@ -4145,9 +4338,11 @@
 			this.displayDiv2C19 = "block";
       // 一堆死数据
     },
+
+	
     //提交 一览表  修改
    async saveForm(){
-     console.log(this.fApi)
+    //  console.log(this.fApi)
      let _this = this;
 		  let data = {
        formData: {
@@ -4157,7 +4352,7 @@
          tableType: 1,
         id:questionId
       }
-      console.log(data,'data')
+      // console.log(data,'data')
 		  let dataJSON = JSON.stringify(data)
       /*接口请求*/
       //  debugger
@@ -4172,7 +4367,10 @@
 					message: '提交成功',
 					type: 'success'
           });
-          _this.rule= _this.rule2
+      _this.rule= _this.rule2
+      // debugger
+      this.StdInfoC(this.eid);
+		  // this.StdInfoC(this.eid);
 				  // this.close1();
 			  }else{
 				  _this.$message({
@@ -4181,7 +4379,10 @@
 				  });
 			  }
 		  }).catch(err => {
-		    this.$message("访问接口失败");
+			this.$message("访问接口失败或登录过期");
+			setTimeout(()=>{
+              _this.$router.push({path:'/EIndex'});
+            },1000)
 		  })
 
      
@@ -4234,7 +4435,13 @@
       // debugger 
       demo.rule=c.data.formData.rule;   
       
-      });
+      }).catch(err => {
+        this.$message("访问接口失败或登录过期");
+        setTimeout(()=>{
+              this.$router.push({path:'/EIndex'});
+         },4000)
+        
+		  })
      
 
 		},
@@ -4435,14 +4642,18 @@
           this.IsChecked = "",
             $("#StartTime").val("");
         },
-		/* 删除一览表 - 新冠 */
+    /* 删除一览表 - 新冠 */
+    
 		delSymC(id) {
+      
       // debugger;
 		  if (confirm('确定删除该信息？')) {
         this.$http.get(`c19/schedule/delete/`+id, {headers: { 'Authorization': this.$getCookie('aToken') },emulateJSON: true}).then((res) => {
           this.$message("删除成功")
           //加载
-           this.stdinfoC19.splice(id, 1)
+          // debugger
+		   this.StdInfoC(this.eid);
+        //    this.stdinfoC19.splice(id, 1)
 		    }).catch(err => {
 		      this.$message("访问接口失败");
 		    })
@@ -4649,20 +4860,25 @@
         },
 		//个案调查 - 新冠
 		Survey1C(e) {
+			// debugger
 		  this.Aid = e.currentTarget.id || e.target.id;
-      //$('#iosDialog1').show();
-        //  this.rule=this.init;
+          ///深拷贝清空rule
+		  this.rule = JSON.parse(JSON.stringify(this.defaultAddForm))
 		  this.displayDiv = "none";
 		  this.displayDiv1 = "none";
 		  this.displayDiv3 = "none";
 		  this.displayDiv4 = "none";
 		  this.displayDiv6 = "none";
-		  this.displayDivC19 = "block";
+      this.displayDivC19 = "block";
+      
       this.ReInfo();
+      this.oddevent();
+		  
       
 		},
         //个案调查
         Survey1(e) {
+		  
           this.Aid = e.currentTarget.id || e.target.id;
           //$('#iosDialog1').show();
           this.displayDiv = "none";
@@ -4698,6 +4914,23 @@
           this.displayDiv1 = "none";
           this.displayDiv6 = "none";
 		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";
+		},
+		//初报告 新冠
+		 Survey4C(e) {
+          this.arr = e.currentTarget.id || e.target.id;
+          let arr1 = this.arr.split(',');
+          this.Aid = arr1[0]; //事件id
+		      this.epidemicid = arr1[1]; //epidemicid
+		      this.oddevent();
+          this.getReportInfoC();
+          this.displayDiv = "none";
+          this.displayDiv4 = "none";
+          this.displayDiv3 = "none";
+          this.displayDiv1 = "none";
+          this.displayDiv6 = "none";
+		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";
+		  this.displayDiv4C19 = "block";
+
         },
         //初报告
         Survey4(e) {
@@ -4774,14 +5007,14 @@
           this.displayDiv2 = "none";
           this.displayDiv1 = "none";
           this.displayDiv = "block";
-		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";
+		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";this.displayDiv4C19 = "none";
         },
         close4() {
           this.displayDiv4 = "none";
           this.displayDiv2 = "none";
           this.displayDiv1 = "none";
           this.displayDiv = "block";
-		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";
+		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";this.displayDiv4C19 = "none";
         },
         close5() {
           this.displayDiv5 = "none";
@@ -4789,7 +5022,7 @@
           this.displayDiv2 = "none";
           this.displayDiv1 = "none";
           this.displayDiv = "block";
-		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";
+		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";this.displayDiv4C19 = "none";
         },
         close6() {
           this.displayDiv6 = "none";
@@ -4797,7 +5030,7 @@
           this.displayDiv2 = "none";
           this.displayDiv1 = "none";
           this.displayDiv = "block";
-		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";
+		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";this.displayDiv4C19 = "none";
         },
         close1() {
           //$('#iosDialog1').hide();
@@ -4806,7 +5039,7 @@
 		  this.displayDiv2 = "none";
 		  this.displayDiv1 = "none";
 		  this.displayDiv = "block";
-		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";
+		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";this.displayDiv4C19 = "none";
         },
         close2() {
           // this.displayDiv2 = "none";
@@ -4816,7 +5049,7 @@
 		  this.displayDiv2 = "none";
 		  this.displayDiv1 = "none";
 		  this.displayDiv = "block";
-		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";
+		  this.displayDivC19 = "none";this.displayDiv2C19 = "none";this.displayDiv4C19 = "none";
         },
         ReInfo() {
           $("#stName").val("");
@@ -5052,7 +5285,29 @@
           } else {
             this.$message("请填写完毕");
           }
-        },
+		},
+		
+		//初报告事件
+		getReportInfoC(){
+	
+	     this.$http.get(`/c19/questionnaire/${this.Aid}/3`,{ headers: { 'Authorization': this.$getCookie('aToken') }, emulateJSON: true }).then(res=>{
+			//  console.log(res)
+         if(res.status!=204){
+			 questionId=res.data.id;
+			 this.rule3=res.data.formData.rule;
+		 }else{
+            questionId=-1;
+		 }
+     
+      }).catch(err => {
+			  this.$message("访问接口失败");
+			  setTimeout(()=>{
+              _this.$router.push({path:'/EIndex'});
+            },1000)
+
+            })
+
+		},
         getReportInfo() {
           let data = {
             "EventID": this.Aid,
@@ -5552,7 +5807,8 @@
     }
     .fromtitle {
       display: flex;
-      justify-content: center;
+        justify-content: center;
+        margin-top: 11px;
       // border: 1px solid red;
       // margin-bottom: 10px;
     }
@@ -5579,7 +5835,8 @@
     padding: 20px;
     // min-width: calc(100% - 600px);
     // width: 80%;
-    width: 1000px;
+	width: 1000px;
+	box-sizing: border-box;
 
     border: 1px solid gray;
     border-radius: 8px;
@@ -5608,5 +5865,9 @@
   display: flex !important;
   padding: 0 !important;
   /* border: 1px solid red; */
+}
+.el-textarea__inner {
+  padding: 30px 15px ;
+  box-sizing: border-box;
 }
 </style>
